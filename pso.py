@@ -116,9 +116,7 @@ def objective_function(x, num_classes, num_instructors_bct, num_instructors_bei,
                 subject_day_count[(day, subject)] = 1
 
             # Check for overlap with labs
-            if subject in labs_bct or subject in labs_bei:
-                if period % 4 != 0:
-                    penalty += 100
+
 
     return penalty
 
@@ -167,8 +165,12 @@ def generate_timetable(num_classes, num_instructors_bct, num_instructors_bei, su
     xopt, fopt = pso(
         custom_objective_function, lb, ub,
         args=(num_classes, num_instructors_bct, num_instructors_bei, num_periods, labs_bct, labs_bei, instructor_type_bct, instructor_type_bei, subjects_bct, subjects_bei),
-        swarmsize=50, maxiter=100
-    )
+        swarmsize=50, maxiter=500,
+        omega=0.5,   # Set the inertia weight (w1)
+        phip=1.5,    # Set the cognitive coefficient (c1)
+        phig=1.5    # Set the social coefficient (c2)
+)
+    
 
 
     # Penalty over iterations (convergence plot)
